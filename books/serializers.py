@@ -2,8 +2,14 @@ from rest_framework import serializers
 from .models import Book
 
 class BookSerializer(serializers.ModelSerializer):
-    total_pages = serializers.IntegerField(read_only=True)
+    pageFrom = serializers.IntegerField(source='page_from')
+    pageTo = serializers.IntegerField(source='page_to')
+    duration = serializers.IntegerField(source='duration_days')
+    totalPages = serializers.SerializerMethodField()
 
     class Meta:
         model = Book
-        fields = ['id', 'title', 'page_from', 'page_to', 'duration_days', 'total_pages']
+        fields = ['id', 'title', 'pageFrom', 'pageTo', 'duration', 'totalPages']
+
+    def get_totalPages(self, obj):
+        return max(0, obj.page_to - obj.page_from + 1)

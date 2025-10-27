@@ -1,5 +1,6 @@
 from hijri_converter import convert
 from datetime import timedelta
+from .models import StudyBlock
 
 def generate_study_blocks(book, start_date):
     total_pages = book.total_pages
@@ -14,6 +15,7 @@ def generate_study_blocks(book, start_date):
 
         blocks.append(StudyBlock(
             book=book,
+            user=book.user,
             date_gregorian=date,
             date_hijri=str(hijri),
             day_of_week=date.strftime('%A'),
