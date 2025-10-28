@@ -11,7 +11,7 @@ class ScheduleListView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        blocks = StudyBlock.objects.filter(user=request.user)
+        blocks = StudyBlock.objects.filter(book__user=request.user)
         serializer = ScheduledBlockSerializer(blocks, many=True)
         return Response(serializer.data)
 

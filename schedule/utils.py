@@ -15,7 +15,7 @@ def generate_study_blocks(book, start_date):
 
         blocks.append(StudyBlock(
             book=book,
-            user=book.user,
+            # user=book.user,
             date_gregorian=date,
             date_hijri=str(hijri),
             day_of_week=date.strftime('%A'),
