@@ -24,7 +24,8 @@ class CustomTokenView(TokenObtainPairView):
         serializer.is_valid(raise_exception=True)
         user = serializer.user
         token = serializer.validated_data
-
+        print("Generated token for user:", user.tr_number, "with role:", user.role)
+            
         return Response({
             'access': token['access'],
             'refresh': token['refresh'],

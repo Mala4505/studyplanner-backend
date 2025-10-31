@@ -35,21 +35,6 @@ class ScheduleBookView(APIView):
 
         return Response({'message': 'Schedule created'})
     
-# class UpdateBlockView(APIView):
-#     permission_classes = [IsAuthenticated]
-
-#     def patch(self, request, block_id):
-#         try:
-#             block = StudyBlock.objects.get(id=block_id, book__user=request.user)
-#         except StudyBlock.DoesNotExist:
-#             return Response({'error': 'Block not found'}, status=404)
-
-#         new_date = request.data.get('date_gregorian')
-#         if new_date:
-#             block.date_gregorian = datetime.strptime(new_date, '%Y-%m-%d').date()
-#             block.save()
-#             return Response({'message': 'Block updated'})
-#         return Response({'error': 'Missing date_gregorian'}, status=400)
 
 class UpdateBlockView(APIView):
     permission_classes = [IsAuthenticated]
@@ -103,3 +88,15 @@ class RescheduleBlockView(APIView):
         block.save()
 
         return Response({'message': 'Block rescheduled'})
+
+
+class ClearUserScheduleView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request):
+        user = request.user
+        deleted_count, _ = StudyBlock.objects.filter(book__user=user).delete()
+        return Response(
+            {'message': f'{deleted_count} blocks cleared from your schedule.'},
+            # status=status.HTTP_200_OK
+        )
