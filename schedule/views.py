@@ -90,13 +90,24 @@ class RescheduleBlockView(APIView):
         return Response({'message': 'Block rescheduled'})
 
 
-class ClearUserScheduleView(APIView):
+class ClearBookScheduleView(APIView):
     permission_classes = [IsAuthenticated]
 
     def delete(self, request):
         user = request.user
-        deleted_count, _ = StudyBlock.objects.filter(book__user=user).delete()
-        return Response(
-            {'message': f'{deleted_count} blocks cleared from your schedule.'},
-            # status=status.HTTP_200_OK
-        )
+        StudyBlock.objects.filter(book__user=user).delete()
+        return Response({'message': 'Schedule removed for this book'})
+
+
+
+class DeleteBookScheduleView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, book_id):
+        try:
+            book = Book.objects.get(id=book_id, user=request.user)
+        except Book.DoesNotExist:
+            return Response({'error': 'Book not found'}, status=404)
+
+        StudyBlock.objects.filter(book=book).delete()
+        return Response({'message': 'Schedule removed for this book'})
