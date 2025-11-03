@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import User
+from schedule.models import Tag
 
 class Book(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -7,6 +8,7 @@ class Book(models.Model):
     page_from = models.PositiveIntegerField()
     page_to = models.PositiveIntegerField()
     duration_days = models.PositiveIntegerField()
+    tag = models.ForeignKey(Tag, null=True, blank=True, on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property
